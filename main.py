@@ -12,7 +12,8 @@ st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
 HF_API_TOKEN = st.secrets["hf"]["api_key"]
-HF_MODEL = "bigscience/bloom-560m"
+HF_MODEL = "openai/gpt-oss-20b"
+
 
 uploaded_file = st.file_uploader("Upload your resume (PDF of TXT)", type=["pdf", "txt"])
 job_role = st.text_input("Enter the job role you're targeting (optional)")
@@ -58,7 +59,7 @@ if analyze and uploaded_file:
         headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
         url = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
         payload = {"inputs": prompt, "options": {"wait_for_model": True}}
-        response = requests.post(url, headers=headers, json=payload, timeout=60)
+        response = requests.post(url, headers=headers, json=payload, timeout=120)
         response.raise_for_status()
         data = response.json()
         output_text = data[0]["generated_text"]
