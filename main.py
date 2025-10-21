@@ -12,7 +12,7 @@ st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
 HF_API_TOKEN = st.secrets["hf"]["api_key"]
-HF_MODEL = "openai/gpt-oss-20b"
+HF_MODEL = "Trelis/Llama-2-7b-chat-hf-hosted-inference-8bit"
 
 
 uploaded_file = st.file_uploader("Upload your resume (PDF of TXT)", type=["pdf", "txt"])
