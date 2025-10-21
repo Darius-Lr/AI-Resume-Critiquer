@@ -36,9 +36,9 @@ def chunk_text(text, chunk_size=2000):
 def load_model():
     return pipeline(
         "text-generation",
-        model="mistralai/Mistral-7B-Instruct-v0.3",
+        model="EleutherAI/gpt-neo-1.3B",
         use_auth_token=True,  
-        max_new_tokens=512,
+        max_new_tokens=700,
         do_sample=True,
         temperature=0.7
     )
