@@ -1,24 +1,15 @@
 import streamlit as st
 import PyPDF2
 import io
-import requests
-from dotenv import load_dotenv
-
-load_dotenv()
+from transformers import pipeline
 
 st.set_page_config(page_title="AI Resume Critiquer", page_icon="📃", layout="centered")
 
 st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
-HF_API_TOKEN = st.secrets["hf"]["api_key"]
-HF_MODEL = "gpt2"
-
-
-
-uploaded_file = st.file_uploader("Upload your resume (PDF of TXT)", type=["pdf", "txt"])
+uploaded_file = st.file_uploader("Upload your resume (PDF or TXT)", type=["pdf", "txt"])
 job_role = st.text_input("Enter the job role you're targeting (optional)")
-
 analyze = st.button("Analyze Resume")
 
 
@@ -36,37 +27,54 @@ def extract_text_from_file(uploaded_file):
     return uploaded_file.read().decode("utf-8")
 
 
+def chunk_text(text, chunk_size=2000):
+    """Split long text into chunks to avoid token limits."""
+    return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
+
+
+@st.cache_resource
+def load_model():
+    return pipeline(
+        "text-generation",
+        model="meta-llama/Llama-2-7b-chat-hf",
+        use_auth_token=True,  
+        max_new_tokens=512,
+        do_sample=True,
+        temperature=0.7
+    )
+
+
 if analyze and uploaded_file:
     try:
         file_content = extract_text_from_file(uploaded_file)
-
         if not file_content.strip():
             st.error("File does not have any content...")
             st.stop()
 
-        prompt = f"""Please analyze this resume and provide constructive feedback. 
-        Focus on the following aspects:
-        1. Content clarity and impact
-        2. Skills presentation
-        3. Experience descriptions
-        4. Specific improvements for {job_role if job_role else 'general job applications'}
+        generator = load_model()
 
-        Resume content:
-        {file_content}
+    
+        job_text = f"Targeted job role: {job_role}\n" if job_role else ""
 
-        Please provide your analysis in a clear, structured format with specific recommendations."""
+        feedback = ""
+        for chunk in chunk_text(file_content, chunk_size=2000):
+            prompt = f"""
+You are an AI career advisor. Analyze this resume section and provide feedback in numbered bullet points:
+1. Content clarity
+2. Skills presentation
+3. Experience descriptions
+4. Specific suggestions for improvement
 
+{job_text}
 
-        headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
-        url = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
-        payload = {"inputs": prompt}
-        response = requests.post(url, headers=headers, json=payload, timeout=120)
-        response.raise_for_status()
-        data = response.json()
-        output_text = data[0]["generated_text"]
+Resume section:
+{chunk}
+"""
+            output = generator(prompt)
+            feedback += output[0]["generated_text"] + "\n\n"
 
         st.markdown("### Analysis Results")
-        st.markdown(output_text)
+        st.markdown(feedback)
 
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
