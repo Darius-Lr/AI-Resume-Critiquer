@@ -12,7 +12,7 @@ st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
 HF_API_TOKEN = st.secrets["hf"]["api_key"]
-HF_MODEL = "google/gemma-2b-it"
+HF_MODEL = "gpt2"
 
 
 
