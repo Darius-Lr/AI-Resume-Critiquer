@@ -1,8 +1,7 @@
 import streamlit as st
 import PyPDF2
 import io
-import os
-from openai import OpenAI
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,10 +11,11 @@ st.set_page_config(page_title="AI Resume Critiquer", page_icon="📃", layout="c
 st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+HF_API_TOKEN = st.secrets["hf"]["api_key"]
+HF_MODEL = "gpt2"
 
 uploaded_file = st.file_uploader("Upload your resume (PDF of TXT)", type=["pdf", "txt"])
-job_role = st.text_input("Enter the job role you're taregtting (optional)")
+job_role = st.text_input("Enter the job role you're targeting (optional)")
 
 analyze = st.button("Analyze Resume")
 
@@ -39,7 +39,7 @@ if analyze and uploaded_file:
         file_content = extract_text_from_file(uploaded_file)
 
         if not file_content.strip():
-            st.error("File does not have any contnet...")
+            st.error("File does not have any content...")
             st.stop()
 
         prompt = f"""Please analyze this resume and provide constructive feedback. 
@@ -54,19 +54,17 @@ if analyze and uploaded_file:
 
         Please provide your analysis in a clear, structured format with specific recommendations."""
 
-        client = OpenAI(api_key=OPENAI_API_KEY)
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system",
-                 "content": "You are an expert resume reviewer with years of experience in HR and recruitment."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7,
-            max_tokens=1000
-        )
+
+        headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
+        url = f"https://api-inference.huggingface.co/models/{HF_MODEL}"
+        payload = {"inputs": prompt, "options": {"wait_for_model": True}}
+        response = requests.post(url, headers=headers, json=payload, timeout=60)
+        response.raise_for_status()
+        data = response.json()
+        output_text = data[0]["generated_text"]
+
         st.markdown("### Analysis Results")
-        st.markdown(response.choices[0].message.content)
+        st.markdown(output_text)
 
     except Exception as e:
-        st.error(f"An error occured: {str(e)}")
+        st.error(f"An error occurred: {str(e)}")
