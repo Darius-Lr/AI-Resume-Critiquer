@@ -36,7 +36,7 @@ def chunk_text(text, chunk_size=2000):
 def load_model():
     return pipeline(
         "text-generation",
-        model="meta-llama/Llama-2-7b-chat-hf",
+        model="mistralai/Mistral-7B-Instruct-v0.3",
         use_auth_token=True,  
         max_new_tokens=512,
         do_sample=True,
