@@ -12,7 +12,7 @@ st.title("AI Resume Critiquer")
 st.markdown("Upload your resume and get AI-powered feedback tailored to your needs!")
 
 HF_API_TOKEN = st.secrets["hf"]["api_key"]
-HF_MODEL = "gpt2"
+HF_MODEL = "tiiuae/falcon-7b-instruct"
 
 uploaded_file = st.file_uploader("Upload your resume (PDF of TXT)", type=["pdf", "txt"])
 job_role = st.text_input("Enter the job role you're targeting (optional)")
