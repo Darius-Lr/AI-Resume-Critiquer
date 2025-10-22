@@ -19,11 +19,6 @@ Built with **Streamlit**, it offers actionable advice for improving clarity, ski
 
 ---
 
-## 🎬 Demo
-
-
-
----
 
 
 ## 🛠️ Tech Stack
