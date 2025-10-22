@@ -14,7 +14,7 @@ Built with **Streamlit**, it offers actionable advice for improving clarity, ski
 
 ## 🔗 Live Demo
 
-🚀 Try it now: **[AI Resume Critiquer Live](https://ml-resume-critiquer.streamlit.app/)**  
+🚀 Try it now:https://ml-resume-critiquer.streamlit.app 
 
 
 ---
