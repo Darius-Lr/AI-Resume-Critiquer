@@ -1,14 +1,9 @@
 # 📃 AI Resume Critiquer
 
-![Banner](https://raw.githubusercontent.com/Darius-Lr/AI-Resume-Critiquer/main/banner.png)
-
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.40.0-ff4b4b?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![Transformers](https://img.shields.io/badge/HuggingFace-Transformers-yellow?logo=huggingface&logoColor=white)](https://huggingface.co/transformers/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/Darius-Lr/AI-Resume-Critiquer.svg?style=social)](https://github.com/Darius-Lr/AI-Resume-Critiquer/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/Darius-Lr/AI-Resume-Critiquer.svg?style=social)](https://github.com/Darius-Lr/AI-Resume-Critiquer/network/members)
-[![GitHub Issues](https://img.shields.io/github/issues/Darius-Lr/AI-Resume-Critiquer.svg)](https://github.com/Darius-Lr/AI-Resume-Critiquer/issues)
 
 ---
 
